@@ -4,13 +4,51 @@ import Container from "../component/Container";
 import TextField from "../component/TextField";
 import { BsCheck, BsEnvelopeFill, BsEyeFill } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
+import { authLogin } from "../redux/action/authAction";
+import { useDispatch } from "react-redux";
 
 function Login() {
+  let dispatch = useDispatch();
   const navigate = useNavigate();
-  const handleBack = () => {
-    return navigate(-1);
+  const [payload, setPayload] = React.useState({
+    email: "",
+    password: "",
+  });
+  const handleChange = (e) => {
+    e.preventDefault();
+    setPayload((payload) => {
+      return {
+        ...payload,
+        [e.target.name]: e.target.value,
+      };
+    });
   };
+  const [messageError, setMessageError] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     setIsLoading(true);
+  //     const response = await dispatch(authLogin(payload));
+  //     console.log("response", response);
+  //     // return navigate("/article", { replace: true });
+  //     if (response?.status === "Success") {
+  //     } else {
+  //       setMessageError(response?.response?.data?.message);
+  //     }
+  //   } catch (err) {
+  //     console.log("error =>", err);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
 
+  //   setPayload(() => {
+  //     return {
+  //       email: "",
+  //       password: "",
+  //     };
+  //   });
+  // };
   const [toggle, setToggle] = React.useState(true);
   return (
     <div className="w-screen h-screen flex justify-center items-center">
@@ -19,20 +57,19 @@ function Login() {
         {/* Header */}
         <p className="font-medium">Login</p>
         {/* TextFiel */}
-        <form
-          className="space-y-5"
-          onSubmit={() => {
-            navigate("/dashboard");
-          }}
-        >
+        <form className="space-y-5" onSubmit={()=>{}}>
           <div className="space-y-5">
             <TextField
+              value={payload.email}
+              onChange={handleChange}
               label={"Email"}
               Icons={<BsEnvelopeFill />}
               type="email"
               required
             />
             <TextField
+              value={payload.password}
+              onChange={handleChange}
               label={"Password"}
               Icons={<BsEyeFill />}
               type="password"
