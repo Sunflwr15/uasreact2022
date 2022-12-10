@@ -6,15 +6,20 @@ import { BsCheck, BsEnvelopeFill, BsEyeFill } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import { authLogin } from "../redux/action/authAction";
 import { useDispatch } from "react-redux";
+import "animate.css/animate.min.css";
+import Notification from "rc-notification";
+import Swal from "sweetalert2";
 
 function Login() {
   let dispatch = useDispatch();
   const navigate = useNavigate();
   const [payload, setPayload] = React.useState({
-    email: "",
-    password: "",
+    email: "nabil.gathfan@gmail.com",
+    password: "hannamKang",
   });
   const handleChange = (e) => {
+    // console.log(payload.email);
+    // console.log(payload.password);
     e.preventDefault();
     setPayload((payload) => {
       return {
@@ -22,59 +27,109 @@ function Login() {
         [e.target.name]: e.target.value,
       };
     });
+    if (payload.password.length <= 8) {
+      setMessageError("Password kurang dari 8 karakter");
+    } else {
+      setMessageError("");
+    }
   };
-  const [messageError, setMessageError] = React.useState(false);
+  const [messageError, setMessageError] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     setIsLoading(true);
-  //     const response = await dispatch(authLogin(payload));
-  //     console.log("response", response);
-  //     // return navigate("/article", { replace: true });
-  //     if (response?.status === "Success") {
-  //     } else {
-  //       setMessageError(response?.response?.data?.message);
-  //     }
-  //   } catch (err) {
-  //     console.log("error =>", err);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
 
-  //   setPayload(() => {
-  //     return {
-  //       email: "",
-  //       password: "",
-  //     };
-  //   });
-  // };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // if (payload.email == "nabil@gmail.com" && payload.password == "123") {
+    //   navigate("/dashboard");
+    // } else {
+    //   setMessageError("salah kontol");
+    // }
+    setIsLoading(true);
+    const response = await dispatch(authLogin(payload));
+    console.log("response", response);
+    // console.log("msg", response);
+    try {
+      if (response.status === "Success") {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
+
+        Toast.fire({
+          icon: "success",
+          title: response.msg,
+        });
+        return navigate("/dashboard", { replace: true });
+      } else {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
+
+        Toast.fire({
+          icon: "error",
+          title: response.data.msg,
+        });
+      }
+    } catch (err) {
+      console.log("error =>", err);
+    } finally {
+      setIsLoading(false);
+    }
+
+    // setPayload(() => {
+    //   return {
+    //     email: "",
+    //     password: "",
+    //   };
+    // });
+  };
+  const [password, setPassword] = React.useState(false);
+  const [typePass, settypePass] = React.useState("");
   const [toggle, setToggle] = React.useState(true);
   return (
     <div className="w-screen h-screen flex justify-center items-center">
-      <x />
+      {/* <x /> */}
       <Container className={"space-y-10 w-[500px] h-[600px]"}>
         {/* Header */}
         <p className="font-medium">Login</p>
         {/* TextFiel */}
-        <form className="space-y-5" onSubmit={()=>{}}>
+        <form className="space-y-5" onSubmit={handleSubmit}>
           <div className="space-y-5">
             <TextField
               value={payload.email}
               onChange={handleChange}
               label={"Email"}
+              name="email"
               Icons={<BsEnvelopeFill />}
               type="email"
+              // error={messageError}
               required
             />
             <TextField
               value={payload.password}
               onChange={handleChange}
               label={"Password"}
+              name="password"
               Icons={<BsEyeFill />}
-              type="password"
+              type={typePass}
+              error={messageError}
               required
             />
+
           </div>
           {/* CheckBox */}
           <div className="flex items-center justify-end">
@@ -109,7 +164,11 @@ function Login() {
             >
               Cancel
             </a> */}
-            <Button title={"Submit"} onClick={() => {}} />
+            {isLoading ? (
+              <Button title={"Submitting"} onClick={() => {}} />
+            ) : (
+              <Button title={"Submit"} onClick={() => {}} />
+            )}
           </div>{" "}
         </form>
         <div className="flex h-1/3 items-end justify-center">
@@ -121,7 +180,7 @@ function Login() {
           </p>
         </div>
       </Container>
-      <x />
+      {/* <x /> */}
     </div>
   );
 }

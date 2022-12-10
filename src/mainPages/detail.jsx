@@ -8,30 +8,24 @@ import Container from "../component/Container";
 import Filter from "../component/filter";
 import { getListProduct } from "../redux/action/dashAction";
 
-function Dashboard() {
+function Detail() {
   const auth = useSelector((state) => state.authProcess);
   const navigate = useNavigate();
   const [ListProduct, setListProduct] = useState([]);
   const [ListKategori, setListKategori] = useState([]);
   const [IsFetchProduct, setIsFetchProduct] = useState(true);
-  const [payload, setPayload] = React.useState({
-    kategori: "",
-    keyword: "",
-    page: 1,
-    keyword: "",
-    lowest: 0,
-    highest: 99999999 * 100,
-  });
+  //   const [payload, setPayload] = React.useState({
+  //     kategori: "",
+  //     keyword: "",
+  //     page: 1,
+  //     keyword: "",
+  //     lowest: 0,
+  //     highest: 99999999 * 100,
+  //   });
   const getProduct = async () => {
     try {
       setIsFetchProduct(true);
-      const response = await getProductProcess(
-        payload.kategori,
-        payload.page,
-        payload.keyword,
-        payload.lowest,
-        payload.highest
-      );
+      const response = await getDetailProcess();
       setListProduct(response.data.data.rows);
       console.log(response.data.data.rows);
     } catch (err) {
@@ -131,7 +125,7 @@ function Dashboard() {
               title={items.kategori}
               onClick={() => {
                 setPayload({
-                  kategori: {  },
+                  kategori: {},
                   keyword: "",
                   page: 1,
                   keyword: "",
@@ -147,4 +141,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Detail;
