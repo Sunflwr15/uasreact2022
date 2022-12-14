@@ -13,6 +13,7 @@ export function authLogin(payload) {
   return async (dispatch) => {
     try {
       let response = await loginProses(payload);
+      console.log(payload);
       console.log("res", response);
       let data = response.data;
       // console.log(data.user.email);

@@ -12,6 +12,9 @@ module.exports = {
       },
       borderColor:{
         main: "#1a1a1a",
+      },
+      textColor:{
+        main: "#FFA114",
       }
     },
   },
