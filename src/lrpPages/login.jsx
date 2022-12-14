@@ -38,11 +38,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (payload.email == "nabil@gmail.com" && payload.password == "123") {
-    //   navigate("/dashboard");
-    // } else {
-    //   setMessageError("salah kontol");
-    // }
+
     setIsLoading(true);
     const response = await dispatch(authLogin(payload));
     console.log("response", response);
