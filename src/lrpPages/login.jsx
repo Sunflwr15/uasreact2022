@@ -14,8 +14,8 @@ function Login() {
   let dispatch = useDispatch();
   const navigate = useNavigate();
   const [payload, setPayload] = React.useState({
-    email: "nabil.gathfan@gmail.com",
-    password: "hannamKang",
+    email: "",
+    password: "",
   });
   const handleChange = (e) => {
     // console.log(payload.email);

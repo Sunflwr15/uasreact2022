@@ -78,12 +78,12 @@ function Cart() {
   };
   const countProduct = async (id, jumlah) => {
     try {
+      getProduct()
       const response = await dispatch(putProcess(total));
       setTotal({
         id: id,
         jumlah: jumlah,
       });
-      getProduct()
     } catch (error) {}
   };
   let array = ListProduct.map((value) => value?.produk?.harga * value.jumlah);
