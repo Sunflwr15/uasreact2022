@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const client = axios.create({
-  baseURL: "http://34.128.70.114",
+  baseURL: "https://34.128.70.114",
   headers: {
     Accept: "application/json",
     Authorization: `Bearer ${Cookies.get("myapps_token")}`,
