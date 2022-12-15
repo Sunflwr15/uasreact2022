@@ -61,10 +61,8 @@ function Cart() {
       console.log("Jalan Buy");
       const response = await dispatch(postBuyProcess(payload));
       console.log("RES", response);
-      getProduct();
       return;
     } catch (error) {}
-    getProduct();
   };
   const deleteProduct = async (id) => {
     // e.preventDefault();
@@ -78,7 +76,6 @@ function Cart() {
   };
   const countProduct = async (id, jumlah) => {
     try {
-      getProduct()
       const response = await dispatch(putProcess(total));
       setTotal({
         id: id,
@@ -86,12 +83,12 @@ function Cart() {
       });
     } catch (error) {}
   };
+
   let array = ListProduct.map((value) => value?.produk?.harga * value.jumlah);
   const hasil = array.reduce((total, currentValue) => total + currentValue, 0);
   console.log("hasil =>", hasil);
   useEffect(() => {
     getProduct();
-    // getKategori();
   }, []);
 
   return (
@@ -137,8 +134,8 @@ function Cart() {
             title={"Checkout"}
             onClick={() => {
               // console.log("Belum di set", payload);
-              getProduct();
               buyNow();
+              getProduct();
             }}
           >
             {" "}
@@ -153,10 +150,21 @@ function Cart() {
             {ListProduct.map((items, index) => {
               const json = items.produk.gambarProduk;
               const obj = JSON.parse(json);
-              // countProduct(items.id, 1)
-              if (items.jumlah === 0) {
-                items.jumlah = 0
-              }
+              const handleKurang = () => {
+                if (items.jumlah <= 1) {
+                  return deleteProduct(items.id);
+                } else {
+                  countProduct(items.id, items.jumlah--);
+                }
+                // getProduct();
+              };
+              const handleTambah = () => {
+                if (items.jumlah === -1) {
+                  return;
+                } else {
+                  countProduct(items.id, items.jumlah++);
+                } // getProduct();
+              };
               return (
                 <Container
                   className={
@@ -179,22 +187,11 @@ function Cart() {
                     </div>
                     <div className="flex-row justify-between flex">
                       <div className="flex-row flex items-center space-x-10">
-                        <Button
-                          title={"+"}
-                          onClick={() => {
-                            return countProduct(items.id, items.jumlah + 1);
-                            // return items.jumlah + 1;
-                          }}
-                        ></Button>
+                        <Button title={"+"} onClick={handleTambah}></Button>
 
                         <p>{items.jumlah}</p>
 
-                        <Button
-                          title={"-"}
-                          onClick={() => {
-                            return countProduct(items.id, items.jumlah - 1);
-                          }}
-                        ></Button>
+                        <Button title={"-"} onClick={handleKurang}></Button>
                       </div>{" "}
                       <p className="self-end text-main">
                         {convertRupiah.convert(

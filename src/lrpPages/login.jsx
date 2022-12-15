@@ -27,7 +27,7 @@ function Login() {
         [e.target.name]: e.target.value,
       };
     });
-    if (payload.password.length <= 8) {
+    if (payload.password.length <= 7) {
       setMessageError("Password kurang dari 8 karakter");
     } else {
       setMessageError("");
